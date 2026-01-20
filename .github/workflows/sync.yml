@@ -5,6 +5,11 @@ on:
     types: [sync-L0]  # 监听来自 L0 仓库的 sync-l0 事件
   workflow_dispatch:  # 支持手动触发
 
+# --- 添加以下代码段 ---
+permissions:
+  contents: write  # 赋予写入权限，以便能够推送 gh-pages 分支
+# --------------------
+
 jobs:
   sync-l0:
     runs-on: ubuntu-latest
