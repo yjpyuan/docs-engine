@@ -25,7 +25,7 @@ const config: Config = {
   organizationName: 'w3bank', // Usually your GitHub org/user name.
   projectName: 'w3bank.github.io', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -103,7 +103,7 @@ const config: Config = {
           items: [
             {
               label: 'Tutorial',
-              to: '/docs/intro',
+              to:'/docs/L0-enterprise/',
             },
           ],
         },
