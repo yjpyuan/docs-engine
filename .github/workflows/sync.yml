@@ -1,0 +1,53 @@
+name: Sync L0 Enterprise Docs
+
+on:
+  repository_dispatch:
+    types: [sync-L0]  # 监听来自 L0 仓库的 sync-l0 事件
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  sync-l0:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout docs-engine repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: engineering-docs-platform/package-lock.json
+
+      - name: Install rsync
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rsync
+
+      - name: Sync L0 Repository
+        run: |
+          # 给脚本添加执行权限
+          chmod +x ./knowledge-pipeline/sync/sync-l0.sh
+
+          # 执行同步脚本
+          ./knowledge-pipeline/sync/sync-l0.sh
+
+          # 显示同步结果
+          echo "==> Synced files:"
+          ls -la engineering-docs-platform/docs/L0-enterprise/
+
+      - name: Install dependencies
+        working-directory: ./engineering-docs-platform
+        run: npm ci
+
+      - name: Build Documentation
+        working-directory: ./engineering-docs-platform
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: engineering-docs-platform/build
+          clean: true
