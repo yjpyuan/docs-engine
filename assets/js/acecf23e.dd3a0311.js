@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkw3bank_knowledge_wiki=globalThis.webpackChunkw3bank_knowledge_wiki||[]).push([[1903],{1912(e){e.exports=JSON.parse('{"blogBasePath":"/docs-engine/blog","blogTitle":"Blog","authorsListPath":"/docs-engine/blog/authors"}')}}]);
