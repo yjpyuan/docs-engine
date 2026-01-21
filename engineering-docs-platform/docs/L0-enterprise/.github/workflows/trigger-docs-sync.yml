@@ -1,0 +1,19 @@
+name: Trigger docs-engine sync
+
+on:
+  push:
+    branches:
+      - main  # 监听 main 分支的推送事件
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Trigger repository_dispatch on docs-engine
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        repository: yjpyuan/docs-engine  # 替换为你的目标仓库，格式: owner/repo
+        event-type: sync-L0  # 自定义事件类型，docs-engine 会监听这个事件
+        client-payload: '{"repo": "L0-enterprise", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+        token: ${{ secrets.MY_DISPATCH_TOKEN }} # 必须是刚才配置的 Secret 名

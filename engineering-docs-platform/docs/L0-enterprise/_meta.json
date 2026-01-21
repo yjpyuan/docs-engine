@@ -1,0 +1,21 @@
+{
+  "source": {
+    "repository": "https://github.com/yjpyuan/L0-enterprise.git",
+    "branch": "main",
+    "commit": {
+      "hash": "1996cdab59e2a941925575d80dc1d5298a0d626c",
+      "short": "1996cda",
+      "date": "2026-01-20 21:17:26 +0800",
+      "author": "jpyuan",
+      "message": "task：去掉."
+    }
+  },
+  "sync": {
+    "timestamp": "2026-01-21T06:53:32Z",
+    "script_version": "1.0.0"
+  },
+  "pipeline": {
+    "git_repo": "engineering-docs-platform",
+    "commit": "1996cda"
+  }
+}
