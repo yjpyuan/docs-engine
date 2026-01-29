@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write  # 赋予写入权限，以便能够推送 gh-pages 分支
+  id-token: write
 
 jobs:
   sync-l0:
