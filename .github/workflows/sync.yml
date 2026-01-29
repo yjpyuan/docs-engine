@@ -5,10 +5,8 @@ on:
     types: [sync-L0]  # 监听来自 L0 仓库的 sync-l0 事件
   workflow_dispatch:  # 支持手动触发
 
-# --- 添加以下代码段 ---
 permissions:
   contents: write  # 赋予写入权限，以便能够推送 gh-pages 分支
-# --------------------
 
 jobs:
   sync-l0:
@@ -70,6 +68,36 @@ jobs:
             git push
 
             echo "Changes committed and pushed successfully"
+          fi
+
+      # =========================
+      # 🤖 Claude Code 官方 Action
+      # =========================
+      - name: Run Claude Code (Extract / Refactor Common Docs)
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        env:
+          ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_API_KEY }}
+        with:
+          claude_code_oauth_token: ${{ secrets.YOUR_AANTHROPIC_API_KEYPI_KEY }}
+          prompt: |
+            生成一个test.md 文件，生成在engineering-docs-platform/docs/L0-enterprise/ 
+            生成的内容为hello world
+
+      # 提交 Claude 自动生成/修改的内容
+      - name: Commit Claude changes
+        run: |
+          git config user.name "ai-bot"
+          git config user.email "ai-bot@users.noreply.github.com"
+
+          git add .
+
+          if git diff --staged --quiet; then
+            echo "No AI changes to commit"
+          else
+            git commit -m "ai(docs): extract common content via Claude"
+            git push
+            echo "Claude changes committed and pushed"
           fi
 
       - name: Install dependencies
