@@ -70,7 +70,17 @@ jobs:
 
       #       echo "Changes committed and pushed successfully"
       #     fi
-
+      
+      - name: Debug env
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "ANTHROPIC_API_KEY length: ${#ANTHROPIC_API_KEY}"
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY is EMPTY"
+          else
+            echo "ANTHROPIC_API_KEY is PRESENT"
+          fi
       # =========================
       # 🤖 Claude Code 官方 Action
       # =========================
