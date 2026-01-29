@@ -105,7 +105,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
         run: |
-          yes | claude <<'EOF'
+          claude --non-interactive --yes --auto-approve <<'EOF'
           创建 engineering-docs-platform/docs/L0-enterprise/test.md
           内容：
           hello world，和你想和我说的话，最少200字
@@ -129,17 +129,17 @@ jobs:
             echo "Claude changes committed and pushed"
           fi
 
-      - name: Install dependencies
-        working-directory: ./engineering-docs-platform
-        run: npm ci
+      # - name: Install dependencies
+      #   working-directory: ./engineering-docs-platform
+      #   run: npm ci
 
-      - name: Build Documentation
-        working-directory: ./engineering-docs-platform
-        run: npm run build
+      # - name: Build Documentation
+      #   working-directory: ./engineering-docs-platform
+      #   run: npm run build
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: engineering-docs-platform/build
-          clean: true
+      # - name: Deploy to GitHub Pages
+      #   uses: JamesIves/github-pages-deploy-action@v4
+      #   with:
+      #     branch: gh-pages
+      #     folder: engineering-docs-platform/build
+      #     clean: true
