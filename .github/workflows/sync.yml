@@ -78,9 +78,9 @@ jobs:
         id: claude
         uses: anthropics/claude-code-action@v1
         env:
-          ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_API_KEY }}
+          ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
         with:
-          claude_code_oauth_token: ${{ secrets.YOUR_AANTHROPIC_API_KEYPI_KEY }}
+          claude_code_oauth_token: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             生成一个test.md 文件，生成在engineering-docs-platform/docs/L0-enterprise/ 
             生成的内容为hello world
