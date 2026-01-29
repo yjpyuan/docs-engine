@@ -29,47 +29,47 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rsync
 
-      - name: Sync L0 Repository
-        run: |
-          # 给脚本添加执行权限
-          chmod +x ./knowledge-pipeline/sync/sync-l0.sh
+      # - name: Sync L0 Repository
+      #   run: |
+      #     # 给脚本添加执行权限
+      #     chmod +x ./knowledge-pipeline/sync/sync-l0.sh
 
-          # 执行同步脚本
-          ./knowledge-pipeline/sync/sync-l0.sh
+      #     # 执行同步脚本
+      #     ./knowledge-pipeline/sync/sync-l0.sh
 
-          # 显示同步结果
-          echo "==> Synced files:"
-          ls -la engineering-docs-platform/docs/L0-enterprise/
+      #     # 显示同步结果
+      #     echo "==> Synced files:"
+      #     ls -la engineering-docs-platform/docs/L0-enterprise/
 
-      - name: Commit synced content
-        run: |
-          # 配置 Git 用户信息
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+      # - name: Commit synced content
+      #   run: |
+      #     # 配置 Git 用户信息
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # 添加 docs 目录的所有变更
-          git add engineering-docs-platform/docs/
+      #     # 添加 docs 目录的所有变更
+      #     git add engineering-docs-platform/docs/
 
-          # 检查是否有变更
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            # 读取 _meta.json 获取源仓库 commit 信息
-            COMMIT_SHORT=$(grep '"short"' engineering-docs-platform/docs/L0-enterprise/_meta.json | cut -d'"' -f4)
+      #     # 检查是否有变更
+      #     if git diff --staged --quiet; then
+      #       echo "No changes to commit"
+      #     else
+      #       # 读取 _meta.json 获取源仓库 commit 信息
+      #       COMMIT_SHORT=$(grep '"short"' engineering-docs-platform/docs/L0-enterprise/_meta.json | cut -d'"' -f4)
 
-            # 提交变更（使用 HEREDOC 支持多行 commit message）
-            git commit -m "$(cat <<EOF
-          sync(docs): sync L0-enterprise@${COMMIT_SHORT}
+      #       # 提交变更（使用 HEREDOC 支持多行 commit message）
+      #       git commit -m "$(cat <<EOF
+      #     sync(docs): sync L0-enterprise@${COMMIT_SHORT}
 
-          Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
-          EOF
-          )"
+      #     Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+      #     EOF
+      #     )"
 
-            # 推送到远程仓库
-            git push
+      #       # 推送到远程仓库
+      #       git push
 
-            echo "Changes committed and pushed successfully"
-          fi
+      #       echo "Changes committed and pushed successfully"
+      #     fi
 
       # =========================
       # 🤖 Claude Code 官方 Action
