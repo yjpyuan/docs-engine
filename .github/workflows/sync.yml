@@ -106,10 +106,18 @@ jobs:
           claude_args: |
             --allowedTools Edit,Read,Write
           prompt: |
-            生成一个 test.md 文件
-            路径：engineering-docs-platform/docs/L0-enterprise/test.md
-            内容：
-            hello world ，加上你想和我说的话300字
+            请检查路径：engineering-docs-platform/docs/L0-enterprise/test.md
+            
+            1. 如果文件【已经存在】：
+               - 请务必先读取 (Read) 该文件内容。
+               - 然后直接覆盖 (Overwrite) 为新内容。
+            2. 如果文件【不存在】：
+               - 请直接创建并写入新内容。
+            
+            新内容要求：
+            hello world ，加上你想和我说的话300字。
+            
+            注意：这是一个自动化流程，无论哪种情况都请直接执行，不要提问。
       # - name: Install Claude Code CLI
       #   run: npm install -g @anthropic-ai/claude-code
    
