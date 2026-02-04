@@ -95,6 +95,8 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: |
+            --allowedTools Edit,Read,Write
           prompt: |
             生成一个 test.md 文件
             路径：engineering-docs-platform/docs/L0-enterprise/test.md
