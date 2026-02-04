@@ -15,7 +15,15 @@ jobs:
 
     steps:
       - name: Checkout docs-engine repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
+
+      - name: Debug git auth
+        run: |
+          git remote -v
+          git config --list | grep -i credential || true
 
       # - name: Setup Node.js
       #   uses: actions/setup-node@v3
@@ -136,7 +144,6 @@ jobs:
 
       # - name: Install dependencies
       #   working-directory: ./engineering-docs-platform
-      #   run: npm ci
 
       # - name: Build Documentation
       #   working-directory: ./engineering-docs-platform
