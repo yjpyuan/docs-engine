@@ -159,10 +159,17 @@ jobs:
       - name: Claude Git Commit
         id: claude_commit
         uses: anthropics/claude-code-action@v1
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           # 这一步必须开启 Shell 权限
-          claude_args: "--allowedTools Shell,Read"
+          claude_args: |
+            --allowedTools Edit,Read,Write,Shell
+            --yes
           prompt: |
             请执行以下 Git 操作：
             1. 使用 Shell 命令配置 Git 用户：name "ai-bot", email "ai-bot@users.noreply.github.com"。
