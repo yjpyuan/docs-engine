@@ -104,20 +104,22 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
-            --allowedTools Edit,Read,Write
+            --allowedTools Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(bun:*),Bash(npm:*),Bash(npx:*),Bash(gh:*)
           prompt: |
-            请检查路径：engineering-docs-platform/docs/L0-enterprise/test.md
+            Task 1: Content Update
+            - Check path: engineering-docs-platform/docs/L0-enterprise/test.md
+            - If exists, Read then Overwrite. If not, Create.
+            - Content: "hello world" followed by your 400-character reflection on AI collaboration.
             
-            1. 如果文件【已经存在】：
-               - 请务必先读取 (Read) 该文件内容。
-               - 然后直接覆盖 (Overwrite) 为新内容。
-            2. 如果文件【不存在】：
-               - 请直接创建并写入新内容。
+            Task 2: Git Operations (Run via Shell tool)
+            - Run: git config --global user.name "ai-bot"
+            - Run: git config --global user.email "ai-bot@users.noreply.github.com"
+            # 这一步非常重要：使用环境变量中的 token 确保鉴权
+            - Run: git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+            - Run: git add .
+            - Run: git diff --staged --quiet || (git commit -m "ai(docs): update via Claude" && git push origin HEAD)
             
-            新内容要求：
-            hello world ，加上你想和我说的话400字。
-            
-            注意：这是一个自动化流程，无论哪种情况都请直接执行，不要提问。
+            Note: This is a CI environment. Execute all steps without asking.
       # - name: Install Claude Code CLI
       #   run: npm install -g @anthropic-ai/claude-code
    
@@ -156,20 +158,20 @@ jobs:
       #     fi
 
       # 第二步：由 AI 负责 Git 提交
-      - name: Claude Git Commit
-        id: claude_commit
-        uses: anthropics/claude-code-action@v1
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
-          # 注入 GITHUB_TOKEN 确保 git push 有权限执行
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          claude_args: "--allowedTools Edit,Read,Write,Shell --yes --verbose"
-          # claude_args: "--allowedTools 'Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(bun:*),Bash(npm:*),Bash(npx:*),Bash(gh:*)'"
-          # 直接调用你定义的命令文件名（去掉 .md 后缀）
-          prompt: "/ai-commit"
+      # - name: Claude Git Commit
+      #   id: claude_commit
+      #   uses: anthropics/claude-code-action@v1
+      #   env:
+      #     ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      #     ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      #     # 注入 GITHUB_TOKEN 确保 git push 有权限执行
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+      #     claude_args: "--allowedTools Edit,Read,Write,Shell --yes --verbose"
+      #     # claude_args: "--allowedTools 'Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(bun:*),Bash(npm:*),Bash(npx:*),Bash(gh:*)'"
+      #     # 直接调用你定义的命令文件名（去掉 .md 后缀）
+      #     prompt: "/ai-commit"
 
       # - name: Install dependencies
       #   working-directory: ./engineering-docs-platform
