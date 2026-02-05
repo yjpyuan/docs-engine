@@ -161,24 +161,14 @@ jobs:
         uses: anthropics/claude-code-action@v1
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
-          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 注入 GITHUB_TOKEN 确保 git push 有权限执行
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          # 这一步必须开启 Shell 权限
-          claude_args: |
-            --allowedTools Edit,Read,Write,Shell
-            --yes
-          prompt: |
-            请执行以下 Git 操作：
-            1. 使用 Shell 命令配置 Git 用户：name "ai-bot", email "ai-bot@users.noreply.github.com"。
-            2. 执行 `git add .`。
-            3. 检查是否有暂存的更改：
-               - 如果有，请根据你刚才修改的内容，撰写一个简短专业的 commit message 并执行 `git commit`。
-               - 然后执行 `git push`。
-               - 如果没有更改，直接输出 "No changes to commit"。
-            注意：这是一个自动化环境，请直接通过 Shell 工具执行命令，不要询问我。
+          claude_args: "--allowedTools 'Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(bun:*),Bash(npm:*),Bash(npx:*),Bash(gh:*)'"
+          # 直接调用你定义的命令文件名（去掉 .md 后缀）
+          prompt: "/ai-commit"
 
       # - name: Install dependencies
       #   working-directory: ./engineering-docs-platform
