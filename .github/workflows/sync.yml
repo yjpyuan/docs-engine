@@ -140,36 +140,36 @@ jobs:
       #     git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/yjpyuan/docs-engine.git
 
       # 提交 Claude 自动生成/修改的内容
-      # - name: Commit Claude changes
-      #   run: |
-      #     git config user.name "ai-bot"
-      #     git config user.email "ai-bot@users.noreply.github.com"
+      - name: Commit Claude changes
+        run: |
+          git config user.name "ai-bot"
+          git config user.email "ai-bot@users.noreply.github.com"
 
-      #     git add .
+          git add .
 
-      #     if git diff --staged --quiet; then
-      #       echo "No AI changes to commit"
-      #     else
-      #       git commit -m "ai(docs): extract common content via Claude"
-      #       git push
-      #       echo "Claude changes committed and pushed"
-      #     fi
+          if git diff --staged --quiet; then
+            echo "No AI changes to commit"
+          else
+            git commit -m "ai(docs): extract common content via Claude"
+            git push
+            echo "Claude changes committed and pushed"
+          fi
 
       # 第二步：由 AI 负责 Git 提交
-      - name: Claude Git Commit
-        id: claude_commit
-        uses: anthropics/claude-code-action@v1
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
-          # 注入 GITHUB_TOKEN 确保 git push 有权限执行
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          claude_args: "--allowedTools Edit,Read,Write,Shell --yes --verbose"
-          # claude_args: "--allowedTools 'Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(bun:*),Bash(npm:*),Bash(npx:*),Bash(gh:*)'"
-          # 直接调用你定义的命令文件名（去掉 .md 后缀）
-          prompt: "/ai-commit"
+      # - name: Claude Git Commit
+      #   id: claude_commit
+      #   uses: anthropics/claude-code-action@v1
+      #   env:
+      #     ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      #     ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      #     # 注入 GITHUB_TOKEN 确保 git push 有权限执行
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+      #     claude_args: "--allowedTools Edit,Read,Write,Shell --yes --verbose"
+      #     # claude_args: "--allowedTools 'Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(bun:*),Bash(npm:*),Bash(npx:*),Bash(gh:*)'"
+      #     # 直接调用你定义的命令文件名（去掉 .md 后缀）
+      #     prompt: "/ai-commit"
 
       # - name: Install dependencies
       #   working-directory: ./engineering-docs-platform
