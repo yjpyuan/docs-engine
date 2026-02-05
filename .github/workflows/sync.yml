@@ -90,6 +90,12 @@ jobs:
             echo "ANTHROPIC_API_KEY is PRESENT"
           fi
 
+      - name: Force set git remote with token
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
       # =========================
       # 🤖 Claude Code 官方 Action
       # =========================
@@ -105,21 +111,7 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
             --allowedTools Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(bun:*),Bash(npm:*),Bash(npx:*),Bash(gh:*)
-          prompt: |
-            Task 1: Content Update
-            - Check path: engineering-docs-platform/docs/L0-enterprise/test.md
-            - If exists, Read then Overwrite. If not, Create.
-            - Content: "hello world" followed by your 400-character reflection on AI collaboration.
-            
-            Task 2: Git Operations (Run via Shell tool)
-            - Run: git config --global user.name "ai-bot"
-            - Run: git config --global user.email "ai-bot@users.noreply.github.com"
-            # 这一步非常重要：使用环境变量中的 token 确保鉴权
-            - Run: git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-            - Run: git add .
-            - Run: git diff --staged --quiet || (git commit -m "ai(docs): update via Claude" && git push origin HEAD)
-            
-            Note: This is a CI environment. Execute all steps without asking.
+          prompt: "/ai-commit"
       # - name: Install Claude Code CLI
       #   run: npm install -g @anthropic-ai/claude-code
    
@@ -134,12 +126,7 @@ jobs:
       #     hello world，和你想和我说的话，最少200字
       #     EOF
 
-
-      - name: Force set git remote with token
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/yjpyuan/docs-engine.git
+      # =========================
 
       # 提交 Claude 自动生成/修改的内容
       # - name: Commit Claude changes
