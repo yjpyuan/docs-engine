@@ -133,11 +133,11 @@ jobs:
       #     EOF
 
 
-      # - name: Force set git remote with token
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/yjpyuan/docs-engine.git
+      - name: Force set git remote with token
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/yjpyuan/docs-engine.git
 
       # 提交 Claude 自动生成/修改的内容
       - name: Commit Claude changes
